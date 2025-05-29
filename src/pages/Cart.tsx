@@ -7,7 +7,6 @@ const CartPage = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 flex flex-col">
       <Header />
-      
       <main className="container mx-auto px-4 py-8 flex-1">
         <div className="text-center py-8 animate-fade-in">
           <h2 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent mb-4">

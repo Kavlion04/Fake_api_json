@@ -16,9 +16,9 @@ const Wishlist = () => {
 
   if (wishlistCount === 0) {
     return (
-      <div>
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 ">
         <Header />
-        <div className="container mx-auto px-4 py-8">
+        <div className="container mx-auto px-4 py-8 ">
           <div className="flex flex-col items-center justify-center min-h-[60vh] text-center">
             <ShoppingBag className="h-16 w-16 text-gray-400 mb-4" />
             <h2 className="text-2xl font-semibold mb-2">
