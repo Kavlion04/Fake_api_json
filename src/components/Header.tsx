@@ -1,12 +1,13 @@
-
-import { ShoppingBag,  Users, Home, Package } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Link, useLocation } from 'react-router-dom';
-import { useCart } from '@/contexts/CartContext';
+import { ShoppingBag, Users, Home, Package, Heart } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Link, useLocation } from "react-router-dom";
+import { useCart } from "@/contexts/CartContext";
+import { useWishlist } from "@/contexts/WishlistContext";
 
 const Header = () => {
   const { totalItems } = useCart();
+  const { wishlist } = useWishlist();
   const location = useLocation();
 
   return (
@@ -19,11 +20,11 @@ const Header = () => {
               StoreApi
             </h1>
           </Link>
-          
+
           <div className="flex items-center space-x-2">
             <Link to="/">
-              <Button 
-                variant={location.pathname === '/' ? 'default' : 'ghost'} 
+              <Button
+                variant={location.pathname === "/" ? "default" : "ghost"}
                 size="sm"
                 className="font-bold"
               >
@@ -33,8 +34,10 @@ const Header = () => {
             </Link>
 
             <Link to="/products">
-              <Button 
-                variant={location.pathname === '/products' ? 'default' : 'ghost'} 
+              <Button
+                variant={
+                  location.pathname === "/products" ? "default" : "ghost"
+                }
                 size="sm"
                 className="font-bold"
               >
@@ -42,10 +45,10 @@ const Header = () => {
                 <span className="hidden sm:inline">Products</span>
               </Button>
             </Link>
-            
+
             <Link to="/users">
-              <Button 
-                variant={location.pathname === '/users' ? 'default' : 'ghost'} 
+              <Button
+                variant={location.pathname === "/users" ? "default" : "ghost"}
                 size="sm"
                 className="font-bold"
               >
@@ -53,18 +56,39 @@ const Header = () => {
                 <span className="hidden sm:inline">Users</span>
               </Button>
             </Link>
-            
+
+            <Link to="/wishlist">
+              <Button
+                variant={
+                  location.pathname === "/wishlist" ? "default" : "outline"
+                }
+                size="sm"
+                className="relative font-bold border-none"
+              >
+                <Heart className="h-4 w-4 mr-2" />
+                <span className="hidden sm:inline">Wishlist</span>
+                {wishlist.length > 0 && (
+                  <Badge
+                    variant="destructive"
+                    className="absolute -top-2 -right-2 h-5 w-5 p-0 flex items-center justify-center text-xs"
+                  >
+                    {wishlist.length}
+                  </Badge>
+                )}
+              </Button>
+            </Link>
+
             <Link to="/cart">
-              <Button 
-                variant={location.pathname === '/cart' ? 'default' : 'outline'} 
-                size="sm" 
-                className="relative font-bold"
+              <Button
+                variant={location.pathname === "/cart" ? "default" : "outline"}
+                size="sm"
+                className="relative font-bold border-none"
               >
                 <ShoppingBag className="h-4 w-4 mr-2" />
                 <span className="hidden sm:inline">Cart</span>
                 {totalItems > 0 && (
-                  <Badge 
-                    variant="destructive" 
+                  <Badge
+                    variant="destructive"
                     className="absolute -top-2 -right-2 h-5 w-5 p-0 flex items-center justify-center text-xs"
                   >
                     {totalItems}

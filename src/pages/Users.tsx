@@ -1,24 +1,21 @@
-import React ,{ Suspense, lazy, useMemo } from 'react';
-import { useUsers } from '@/hooks/useUsers';
-import UserSkeletonGrid from '@/components/UserSkeleton';
-import Header from '@/components/Header';
-import Footer from '@/components/Footer';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { RefreshCw, AlertTriangle, Users as UsersIcon } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-const UserGrid = lazy(() => import('@/components/UserGrid'));
+import React, { Suspense, lazy } from "react";
+import { useUsers } from "@/hooks/useUsers";
+import UserSkeletonGrid from "@/components/UserSkeleton";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { RefreshCw, AlertTriangle, Users as UsersIcon } from "lucide-react";
+import { Button } from "@/components/ui/button";
+
+const UserGrid = lazy(() => import("@/components/UserGrid"));
 
 const Users = () => {
   const { data: users, isLoading, error, refetch } = useUsers();
 
-  const userCount = useMemo(() => {
-    return users?.length || 0;
-  }, [users]);
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-blue-50 flex flex-col">
       <Header />
-      
+
       <main className="container mx-auto px-4 py-8 flex-1">
         <div className="text-center py-12 animate-fade-in">
           <h1 className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-green-600 via-blue-600 to-purple-600 bg-clip-text text-transparent mb-4">
@@ -36,11 +33,7 @@ const Users = () => {
                 <UsersIcon className="h-6 w-6" />
                 Community Members
               </h2>
-              {users && (
-                <p className="text-gray-600">
-                  {userCount} members
-                </p>
-              )}
+              {users && <p className="text-gray-600">{users.length} members</p>}
             </div>
 
             {error && (
@@ -50,9 +43,9 @@ const Users = () => {
                   <span className="text-red-600">
                     Failed to load users. Please try again.
                   </span>
-                  <Button 
-                    variant="outline" 
-                    size="sm" 
+                  <Button
+                    variant="outline"
+                    size="sm"
                     onClick={() => refetch()}
                     className="ml-4"
                   >
@@ -63,14 +56,16 @@ const Users = () => {
               </Alert>
             )}
 
-            {isLoading && <UserSkeletonGrid />}
-
-            {users && !isLoading && (
-              <Suspense fallback={<UserSkeletonGrid />}>
-                <div className="animate-fade-in">
-                  <UserGrid users={users} />
-                </div>
-              </Suspense>
+            {isLoading ? (
+              <UserSkeletonGrid />
+            ) : (
+              users && (
+                <Suspense fallback={<UserSkeletonGrid />}>
+                  <div className="animate-fade-in">
+                    <UserGrid users={users} />
+                  </div>
+                </Suspense>
+              )
             )}
 
             {!isLoading && !error && users?.length === 0 && (
@@ -79,8 +74,6 @@ const Users = () => {
               </div>
             )}
           </div>
-
-          
         </div>
       </main>
 

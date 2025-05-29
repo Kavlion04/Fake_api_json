@@ -4,7 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Link } from 'react-router-dom';
-import { ShoppingBag, Users, Package, BarChart3, Star, TrendingUp } from 'lucide-react';
+import { ShoppingBag, Users, Package, BarChart3, Star, TrendingUp, Heart } from 'lucide-react';
 import { useCart } from '@/contexts/CartContext';
 
 const Dashboard = () => {
@@ -36,12 +36,12 @@ const Dashboard = () => {
       stats: `${totalItems} items - $${totalPrice.toFixed(2)}`
     },
     {
-      title: 'Analytics',
+      title: 'Wishlist ',
       description: 'View performance metrics',
-      icon: BarChart3,
-      link: '#',
-      color: 'bg-orange-500',
-      stats: 'Coming soon'
+      icon: Heart,
+      link: '/wishlist',
+      color: 'bg-red-500',
+      stats: 'wishlist'
     },
     {
       title: 'Reviews',

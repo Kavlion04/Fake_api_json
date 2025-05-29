@@ -1,9 +1,9 @@
-
-import React, { memo, useState } from 'react';
-import { Card, CardContent } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { User, MapPin, Phone, Mail } from 'lucide-react';
-import type { User as UserType } from '@/hooks/useUsers';
+import React, { memo, useState, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { User, MapPin, Phone, Mail } from "lucide-react";
+import type { User as UserType } from "@/hooks/useUsers";
 
 interface UserCardProps {
   user: UserType;
@@ -12,22 +12,30 @@ interface UserCardProps {
 
 const UserCard = memo<UserCardProps>(({ user, index }) => {
   const [isHovered, setIsHovered] = useState(false);
+  const navigate = useNavigate();
+
+  const handleCardClick = useCallback(() => {
+    navigate(`/users/${user.id}`);
+  }, [navigate, user.id]);
 
   return (
-    <Card 
+    <Card
       className="group overflow-hidden transition-all duration-500 hover:shadow-xl hover:-translate-y-2 cursor-pointer animate-fade-in border-0 bg-white/80 backdrop-blur-sm"
-      style={{ 
+      style={{
         animationDelay: `${index * 100}ms`,
-        animationFillMode: 'both'
+        animationFillMode: "both",
       }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
+      onClick={handleCardClick}
     >
       <div className="relative p-6">
         {/* Avatar */}
-        <div className={`w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center mb-4 mx-auto transition-all duration-300 ${
-          isHovered ? 'scale-110' : 'scale-100'
-        }`}>
+        <div
+          className={`w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center mb-4 mx-auto transition-all duration-300 ${
+            isHovered ? "scale-110" : "scale-100"
+          }`}
+        >
           <User className="h-8 w-8 text-white" />
         </div>
 
@@ -46,12 +54,12 @@ const UserCard = memo<UserCardProps>(({ user, index }) => {
               <Mail className="h-4 w-4 text-blue-500" />
               <span className="truncate">{user.email}</span>
             </div>
-            
+
             <div className="flex items-center justify-center gap-2">
               <Phone className="h-4 w-4 text-green-500" />
               <span>{user.phone}</span>
             </div>
-            
+
             <div className="flex items-center justify-center gap-2">
               <MapPin className="h-4 w-4 text-red-500" />
               <span className="text-center">
@@ -65,6 +73,6 @@ const UserCard = memo<UserCardProps>(({ user, index }) => {
   );
 });
 
-UserCard.displayName = 'UserCard';
+UserCard.displayName = "UserCard";
 
 export default UserCard;

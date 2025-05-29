@@ -1,6 +1,5 @@
-
-import { ShoppingBag, Heart, Mail, Phone } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { ShoppingBag, Heart, Mail, Phone } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const Footer = () => {
   return (
@@ -11,7 +10,7 @@ const Footer = () => {
             <Link to="/" className="flex items-center space-x-2">
               <ShoppingBag className="h-8 w-8 text-blue-400" />
               <h3 className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-                StoreCraft
+                StoreApi
               </h3>
             </Link>
             <p className="text-gray-400">
@@ -23,18 +22,35 @@ const Footer = () => {
             <h4 className="text-lg font-semibold">Quick Links</h4>
             <ul className="space-y-2">
               <li>
-                <Link to="/" className="text-gray-400 hover:text-white transition-colors">
+                <Link
+                  to="/"
+                  className="text-gray-400 hover:text-white transition-colors"
+                >
                   Products
                 </Link>
               </li>
               <li>
-                <Link to="/users" className="text-gray-400 hover:text-white transition-colors">
+                <Link
+                  to="/users"
+                  className="text-gray-400 hover:text-white transition-colors"
+                >
                   Users
                 </Link>
               </li>
               <li>
-                <Link to="/cart" className="text-gray-400 hover:text-white transition-colors">
+                <Link
+                  to="/cart"
+                  className="text-gray-400 hover:text-white transition-colors"
+                >
                   Cart
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/wishlist"
+                  className="text-gray-400 hover:text-white transition-colors"
+                >
+                  Wishlist
                 </Link>
               </li>
             </ul>
@@ -70,7 +86,7 @@ const Footer = () => {
         </div>
 
         <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-          <p>&copy; 2024 StoreCraft. All rights reserved.</p>
+          <p>&copy; 2024 StoreApi. All rights reserved.</p>
         </div>
       </div>
     </footer>

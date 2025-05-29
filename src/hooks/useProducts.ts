@@ -15,7 +15,7 @@ interface Product {
 }
 
 const fetchProducts = async (): Promise<Product[]> => {
-  const response = await fetch('https://fakestoreapi.com/products');
+  const response = await fetch('https://fakestoreapi.com/products?limit=100');
   if (!response.ok) {
     throw new Error('Failed to fetch products');
   }

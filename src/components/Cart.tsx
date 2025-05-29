@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useCart } from '@/contexts/CartContext';
 import { ShoppingCart, Plus, Minus, Trash2 } from 'lucide-react';
+import imgs from '@/assets/basket_no_page.webp';
 
 const Cart = memo(() => {
   const { items, updateQuantity, removeFromCart, clearCart, totalItems, totalPrice } = useCart();
@@ -16,14 +17,8 @@ const Cart = memo(() => {
   if (items.length === 0) {
     return (
       <Card className="w-full max-w-md animate-fade-in">
-        <CardHeader className="text-center">
-          <CardTitle className="flex items-center justify-center gap-2">
-            <ShoppingCart className="h-5 w-5" />
-            Cart
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="text-center py-8">
-          <p className="text-gray-500">Your cart is empty</p>
+        <CardContent className="text-center flex items-center py-8">
+          <img src={imgs} alt="" />
         </CardContent>
       </Card>
     );
