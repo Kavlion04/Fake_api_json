@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Switch } from "@/components/ui/switch";
 import { Star, ShoppingCart, Heart } from "lucide-react";
 import { Product } from "@/hooks/useProducts";
 import { useCart } from "@/contexts/CartContext";
@@ -17,7 +18,7 @@ const ProductCard = ({ product, index }: ProductCardProps) => {
   const [imageLoaded, setImageLoaded] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const { addToCart } = useCart();
-  const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
+  const { toggleWishlist, isInWishlist } = useWishlist();
   const navigate = useNavigate();
 
   const handleAddToCart = useCallback(
@@ -43,13 +44,9 @@ const ProductCard = ({ product, index }: ProductCardProps) => {
   const handleWishlistToggle = useCallback(
     (e: React.MouseEvent) => {
       e.stopPropagation();
-      if (isInWishlist(product.id)) {
-        removeFromWishlist(product.id);
-      } else {
-        addToWishlist(product);
-      }
+      toggleWishlist(product);
     },
-    [addToWishlist, removeFromWishlist, isInWishlist, product]
+    [toggleWishlist, product]
   );
 
   return (
@@ -92,23 +89,31 @@ const ProductCard = ({ product, index }: ProductCardProps) => {
           {product.category}
         </Badge>
 
-        <div className="absolute top-3 right-3 flex gap-2 bg-black-1/2">
-          <Button
-            size="sm"
-            variant={isInWishlist(product.id) ? "destructive" : "outline"}
-            className={`transition-all duration-300 ${
+        <div className="absolute top-3 right-3 flex gap-2">
+          <div
+            className={`flex items-center space-x-2 transition-all duration-300 ${
               isHovered
                 ? "translate-x-0 opacity-100"
                 : "translate-x-8 opacity-0"
             }`}
             onClick={handleWishlistToggle}
           >
+           <Button size="sm"
+            className={`transition-all duration-300 ${
+              isHovered
+                ? "translate-x-0 opacity-100"
+                : "translate-x-8 opacity-0"
+            }`}>
+
             <Heart
               className={`h-4 w-4 ${
-                isInWishlist(product.id) ? "fill-current" : ""
+                isInWishlist(product.id)
+                  ? "text-red-500 fill-current"
+                  : "text-gray-400"
               }`}
             />
-          </Button>
+            </Button>
+          </div>
           <Button
             size="sm"
             className={`transition-all duration-300 ${

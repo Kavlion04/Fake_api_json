@@ -3,12 +3,33 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { useWishlist } from "@/contexts/WishlistContext";
 import { Button } from "@/components/ui/button";
-import { Heart, Trash2 } from "lucide-react";
+import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Switch } from "@/components/ui/switch";
+import { Heart, ShoppingBag, Star } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 const Wishlist = () => {
-  const { wishlist, removeFromWishlist } = useWishlist();
+  const { wishlist, toggleWishlist, clearWishlist, wishlistCount } =
+    useWishlist();
   const navigate = useNavigate();
+
+  if (wishlistCount === 0) {
+    return (
+      <div className="container mx-auto px-4 py-8">
+        <div className="flex flex-col items-center justify-center min-h-[60vh] text-center">
+          <ShoppingBag className="h-16 w-16 text-gray-400 mb-4" />
+          <h2 className="text-2xl font-semibold mb-2">
+            Your wishlist is empty
+          </h2>
+          <p className="text-gray-600 mb-6">
+            Add items to your wishlist to see them here
+          </p>
+          <Button onClick={() => navigate("/products")}>Browse Products</Button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-blue-50">
@@ -23,59 +44,69 @@ const Wishlist = () => {
           </p>
         </div>
 
-        {wishlist.length === 0 ? (
-          <div className="text-center py-12">
-            <Heart className="h-16 w-16 text-gray-300 mx-auto mb-4" />
-            <h2 className="text-2xl font-semibold text-gray-800 mb-2">
-              Your wishlist is empty
-            </h2>
-            <p className="text-gray-600 mb-6">
-              Add some products to your wishlist to see them here.
-            </p>
-            <Button onClick={() => navigate("/products")}>
-              Browse Products
-            </Button>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {wishlist.map((product) => (
-              <div
-                key={product.id}
-                className="bg-white rounded-lg shadow-lg overflow-hidden group hover:shadow-xl transition-all duration-300"
-              >
-                <div className="relative aspect-square p-6">
-                  <img
-                    src={product.image}
-                    alt={product.title}
-                    className="w-full h-full object-contain"
-                  />
-                  <Button
-                    variant="destructive"
-                    size="icon"
-                    className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                    onClick={() => removeFromWishlist(product.id)}
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
-                </div>
-                <div className="p-4">
-                  <h3 className="font-semibold text-lg mb-2 line-clamp-2">
-                    {product.title}
-                  </h3>
-                  <p className="text-2xl font-bold text-green-600 mb-4">
-                    ${product.price}
-                  </p>
-                  <Button
-                    className="w-full"
-                    onClick={() => navigate(`/products/${product.id}`)}
-                  >
-                    View Details
-                  </Button>
-                </div>
+        <div className="flex justify-between items-center mb-8">
+          <h1 className="text-3xl font-bold">Wishlist ({wishlistCount})</h1>
+          <Button variant="destructive" onClick={clearWishlist}>
+            Clear Wishlist
+          </Button>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {wishlist.map((product) => (
+            <Card key={product.id} className="overflow-hidden">
+              <div className="relative">
+                <img
+                  src={product.image}
+                  alt={product.title}
+                  className="w-full h-48 object-contain p-4"
+                />
+                <Badge className="absolute top-2 left-2">
+                  {product.category}
+                </Badge>
               </div>
-            ))}
-          </div>
-        )}
+
+              <CardContent className="p-4">
+                <h3 className="font-semibold text-lg mb-2 line-clamp-2">
+                  {product.title}
+                </h3>
+                <p className="text-sm text-gray-600 mb-4 line-clamp-2">
+                  {product.description}
+                </p>
+                <div className="flex items-center gap-2 mb-4">
+                  <div className="flex items-center">
+                    <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+                    <span className="text-sm font-medium ml-1">
+                      {product.rating.rate}
+                    </span>
+                  </div>
+                  <span className="text-xs text-gray-500">
+                    ({product.rating.count} reviews)
+                  </span>
+                </div>
+                <p className="text-2xl font-bold text-green-600">
+                  ${product.price}
+                </p>
+              </CardContent>
+
+              <CardFooter className="p-4 pt-0 flex justify-between items-center">
+                <Button
+                  variant="outline"
+                  onClick={() => navigate(`/products/${product.id}`)}
+                >
+                  View Details
+                </Button>
+                <div className="flex items-center space-x-2">
+                  <Switch
+                    checked={true}
+                    onCheckedChange={() => toggleWishlist(product)}
+                    className="data-[state=checked]:bg-red-500"
+                  />
+                  <Heart className="h-4 w-4 text-red-500 fill-current" />
+                </div>
+              </CardFooter>
+            </Card>
+          ))}
+        </div>
       </div>
       <Footer />
     </div>

@@ -1,11 +1,19 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  useCallback,
+} from "react";
 import { Product } from "@/hooks/useProducts";
+import { toast } from "sonner";
 
 interface WishlistContextType {
   wishlist: Product[];
-  addToWishlist: (product: Product) => void;
-  removeFromWishlist: (productId: number) => void;
+  toggleWishlist: (product: Product) => void;
   isInWishlist: (productId: number) => boolean;
+  clearWishlist: () => void;
+  wishlistCount: number;
 }
 
 const WishlistContext = createContext<WishlistContextType | undefined>(
@@ -24,35 +32,60 @@ export const WishlistProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const [wishlist, setWishlist] = useState<Product[]>(() => {
-    const savedWishlist = localStorage.getItem("wishlist");
-    return savedWishlist ? JSON.parse(savedWishlist) : [];
+    try {
+      const savedWishlist = localStorage.getItem("wishlist");
+      return savedWishlist ? JSON.parse(savedWishlist) : [];
+    } catch (error) {
+      console.error("Error loading wishlist from localStorage:", error);
+      return [];
+    }
   });
 
   useEffect(() => {
-    localStorage.setItem("wishlist", JSON.stringify(wishlist));
+    try {
+      localStorage.setItem("wishlist", JSON.stringify(wishlist));
+    } catch (error) {
+      console.error("Error saving wishlist to localStorage:", error);
+    }
   }, [wishlist]);
 
-  const addToWishlist = (product: Product) => {
+  const toggleWishlist = useCallback((product: Product) => {
     setWishlist((prev) => {
-      if (!prev.some((item) => item.id === product.id)) {
+      const isInWishlist = prev.some((item) => item.id === product.id);
+      if (isInWishlist) {
+        toast.success("Product removed from wishlist");
+        return prev.filter((item) => item.id !== product.id);
+      } else {
+        toast.success("Product added to wishlist");
         return [...prev, product];
       }
-      return prev;
     });
-  };
+  }, []);
 
-  const removeFromWishlist = (productId: number) => {
-    setWishlist((prev) => prev.filter((item) => item.id !== productId));
-  };
+  const isInWishlist = useCallback(
+    (productId: number) => {
+      return wishlist.some((item) => item.id === productId);
+    },
+    [wishlist]
+  );
 
-  const isInWishlist = (productId: number) => {
-    return wishlist.some((item) => item.id === productId);
+  const clearWishlist = useCallback(() => {
+    setWishlist([]);
+    toast.success("Wishlist cleared");
+  }, []);
+
+  const wishlistCount = wishlist.length;
+
+  const value = {
+    wishlist,
+    toggleWishlist,
+    isInWishlist,
+    clearWishlist,
+    wishlistCount,
   };
 
   return (
-    <WishlistContext.Provider
-      value={{ wishlist, addToWishlist, removeFromWishlist, isInWishlist }}
-    >
+    <WishlistContext.Provider value={value}>
       {children}
     </WishlistContext.Provider>
   );

@@ -1,6 +1,7 @@
 
 import React, { createContext, useContext, useState, useCallback, useMemo } from 'react';
 import { Product } from '@/hooks/useProducts';
+import { toast } from 'sonner';
 
 interface CartItem extends Product {
   quantity: number;
@@ -25,12 +26,17 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setItems(prev => {
       const existingItem = prev.find(item => item.id === product.id);
       if (existingItem) {
+        toast.success("Product added from cart");
+
         return prev.map(item =>
           item.id === product.id
             ? { ...item, quantity: item.quantity + 1 }
             : item
         );
+
       }
+      toast.success("Product removed from wishlist");
+
       return [...prev, { ...product, quantity: 1 }];
     });
   }, []);
