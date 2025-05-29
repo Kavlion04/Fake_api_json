@@ -16,17 +16,23 @@ const Wishlist = () => {
 
   if (wishlistCount === 0) {
     return (
-      <div className="container mx-auto px-4 py-8">
-        <div className="flex flex-col items-center justify-center min-h-[60vh] text-center">
-          <ShoppingBag className="h-16 w-16 text-gray-400 mb-4" />
-          <h2 className="text-2xl font-semibold mb-2">
-            Your wishlist is empty
-          </h2>
-          <p className="text-gray-600 mb-6">
-            Add items to your wishlist to see them here
-          </p>
-          <Button onClick={() => navigate("/products")}>Browse Products</Button>
+      <div>
+        <Header />
+        <div className="container mx-auto px-4 py-8">
+          <div className="flex flex-col items-center justify-center min-h-[60vh] text-center">
+            <ShoppingBag className="h-16 w-16 text-gray-400 mb-4" />
+            <h2 className="text-2xl font-semibold mb-2">
+              Your wishlist is empty
+            </h2>
+            <p className="text-gray-600 mb-6">
+              Add items to your wishlist to see them here
+            </p>
+            <Button onClick={() => navigate("/products")}>
+              Browse Products
+            </Button>
+          </div>
         </div>
+        <Footer/>
       </div>
     );
   }
